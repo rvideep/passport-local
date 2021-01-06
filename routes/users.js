@@ -27,15 +27,15 @@ router.get("/logout", (req, res) => {
 router.post("/register", (req, res) => {
     const {username, password} = req.body;
     const {salt, hash} = genPassword(password);
-    User.findOne({username: username}, (err, userFound) => {
+    User.findOne({username}, (err, userFound) => {
       if(err)
         console.log(err);
       else {
         if(!userFound) {
           const user = new User({
-            username: username,
-            salt: salt,
-            hash: hash
+            username,
+            salt,
+            hash
           });
   
           user.save().then(() => res.redirect("/login"));
