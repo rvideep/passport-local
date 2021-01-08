@@ -1,4 +1,3 @@
-const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const {validatePassword} = require("../lib/passUtility");
 const User = require("../model/local");
@@ -21,14 +20,16 @@ const verifyCallBack = (username, password, done) => {
 
 const localStartegy = new LocalStrategy(verifyCallBack);
 
-passport.use(localStartegy);
+module.exports = (passport) => {
+  passport.use(localStartegy);
 
-passport.serializeUser(function(user, done) {
+  passport.serializeUser(function(user, done) {
     done(null, user.id);
   });
   
-passport.deserializeUser(function(id, done) {
+  passport.deserializeUser(function(id, done) {
     User.findById(id, function(err, user) {
       done(err, user);
   });
 });
+}
